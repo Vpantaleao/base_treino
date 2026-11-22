@@ -1,4 +1,5 @@
 from database.connection import get_connection
+from entities.entity import Entity
 
 
 class DAOEntity:
@@ -41,7 +42,28 @@ class DAOEntity:
             connection.close()
 
     def find_by_id(self, tarefa_id):
-        pass
+        connection = get_connection()
+        try:
+            row = connection.execute(
+                """
+                SELECT id, titulo, descricao, concluida
+                FROM tarefas
+                WHERE id = ?
+                """,
+                (tarefa_id,),
+            ).fetchone()
+
+            if not row:
+                return None
+
+            return Entity(
+                id=row["id"],
+                titulo=row["titulo"],
+                descricao=row["descricao"],
+                concluida=bool(row["concluida"]),
+            )
+        finally:
+            connection.close()
 
     def update(self, tarefa):
         pass

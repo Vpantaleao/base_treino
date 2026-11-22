@@ -6,6 +6,10 @@ class TaskValidationError(ValueError):
     """Erro de validação nos dados da tarefa."""
 
 
+class TaskNotFoundError(LookupError):
+    """Erro quando a tarefa não é encontrada."""
+
+
 class Services:
     def __init__(self, repository):
         self.repository = repository
@@ -31,7 +35,10 @@ class Services:
         return self.repository.find_all()
 
     def get(self, tarefa_id):
-        pass
+        tarefa = self.repository.find_by_id(tarefa_id)
+        if not tarefa:
+            raise TaskNotFoundError(f"Tarefa com ID {tarefa_id} não encontrada.")
+        return tarefa
 
     def update(self, tarefa_id, titulo, descricao):
         pass
