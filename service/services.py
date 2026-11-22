@@ -28,7 +28,7 @@ class Services:
         return tarefa
 
     def list(self):
-        pass
+        return self.repository.find_all()
 
     def get(self, tarefa_id):
         pass
