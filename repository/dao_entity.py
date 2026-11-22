@@ -82,4 +82,16 @@ class DAOEntity:
             connection.close()
 
     def delete(self, tarefa_id):
-        pass
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                """
+                DELETE FROM tarefas
+                WHERE id = ?
+                """,
+                (tarefa_id,),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()

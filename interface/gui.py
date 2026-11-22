@@ -92,6 +92,31 @@ class UI:
         except TaskValidationError as e:
             print(f"[Erro] {e}")
 
+    def _excluir_tarefa(self):
+        print("\n=== Excluir Tarefa ===")
+        tarefa_id = self._ler_id()
+        if tarefa_id is None:
+            return
+
+        try:
+            tarefa = self.services.get(tarefa_id)
+            descricao_exibicao = tarefa.descricao if tarefa.descricao else "(Sem descrição)"
+            print("\n--- Tarefa Selecionada ---")
+            print(f"ID        : {tarefa.id}")
+            print(f"Título    : {tarefa.titulo}")
+            print(f"Descrição : {descricao_exibicao}")
+            print(f"Situação  : {tarefa.situacao}")
+            print("---------------------------")
+
+            confirmacao = input("Confirma a exclusão permanente? (s/N): ").strip().lower()
+            if confirmacao in ("s", "sim"):
+                self.services.delete(tarefa_id)
+                print(f"[Sucesso] Tarefa #{tarefa_id} excluída permanentemente.")
+            else:
+                print("[Cancelado] Exclusão cancelada. Nenhuma alteração foi feita.")
+        except TaskNotFoundError as e:
+            print(f"[Aviso] {e}")
+
     def show_principal_menu(self):
         while True:
             print("\n=== Menu Principal ===")
@@ -99,6 +124,7 @@ class UI:
             print("2 - Listar tarefas")
             print("3 - Consultar tarefa por ID")
             print("4 - Atualizar tarefa")
+            print("5 - Excluir tarefa")
             print("0 - Sair")
             opcao = input("Escolha uma opção: ").strip()
 
@@ -110,6 +136,8 @@ class UI:
                 self._consultar_tarefa_por_id()
             elif opcao == "4":
                 self._atualizar_tarefa()
+            elif opcao == "5":
+                self._excluir_tarefa()
             elif opcao == "0":
                 print("Encerrando...")
                 break

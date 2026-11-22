@@ -61,4 +61,5 @@ class Services:
         return tarefa_atualizada
 
     def delete(self, tarefa_id):
-        pass
+        self.get(tarefa_id)
+        self.repository.delete(tarefa_id)
