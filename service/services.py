@@ -68,3 +68,8 @@ class Services:
         self.get(tarefa_id)
         self.repository.set_concluida(tarefa_id, True)
         return self.get(tarefa_id)
+
+    def reopen(self, tarefa_id):
+        self.get(tarefa_id)
+        self.repository.set_concluida(tarefa_id, False)
+        return self.get(tarefa_id)

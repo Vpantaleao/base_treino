@@ -132,6 +132,21 @@ class UI:
         except TaskNotFoundError as e:
             print(f"[Aviso] {e}")
 
+    def _reabrir_tarefa(self):
+        print("\n=== Reabrir Tarefa ===")
+        tarefa_id = self._ler_id()
+        if tarefa_id is None:
+            return
+
+        try:
+            tarefa = self.services.reopen(tarefa_id)
+            print(
+                f"[Sucesso] Tarefa #{tarefa.id} ('{tarefa.titulo}') "
+                f"reaberta. Situação atual: {tarefa.situacao}."
+            )
+        except TaskNotFoundError as e:
+            print(f"[Aviso] {e}")
+
     def show_principal_menu(self):
         while True:
             print("\n=== Menu Principal ===")
@@ -141,6 +156,7 @@ class UI:
             print("4 - Atualizar tarefa")
             print("5 - Excluir tarefa")
             print("6 - Concluir tarefa")
+            print("7 - Reabrir tarefa")
             print("0 - Sair")
             opcao = input("Escolha uma opção: ").strip()
 
@@ -156,6 +172,8 @@ class UI:
                 self._excluir_tarefa()
             elif opcao == "6":
                 self._concluir_tarefa()
+            elif opcao == "7":
+                self._reabrir_tarefa()
             elif opcao == "0":
                 print("Encerrando...")
                 break
