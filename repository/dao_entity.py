@@ -95,3 +95,19 @@ class DAOEntity:
             return cursor.rowcount > 0
         finally:
             connection.close()
+
+    def set_concluida(self, tarefa_id, concluida):
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                """
+                UPDATE tarefas
+                SET concluida = ?
+                WHERE id = ?
+                """,
+                (int(bool(concluida)), tarefa_id),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()

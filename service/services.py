@@ -63,3 +63,8 @@ class Services:
     def delete(self, tarefa_id):
         self.get(tarefa_id)
         self.repository.delete(tarefa_id)
+
+    def complete(self, tarefa_id):
+        self.get(tarefa_id)
+        self.repository.set_concluida(tarefa_id, True)
+        return self.get(tarefa_id)
