@@ -1,23 +1,30 @@
 from database.connection import get_connection
 
-class DAOEntity:
 
-    def create(self, task):
-        # Inserir no banco
-        pass
+class DAOEntity:
+    def create(self, tarefa):
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                """
+                INSERT INTO tarefas (titulo, descricao, concluida)
+                VALUES (?, ?, ?)
+                """,
+                (tarefa.titulo, tarefa.descricao, int(tarefa.concluida)),
+            )
+            connection.commit()
+            return int(cursor.lastrowid)
+        finally:
+            connection.close()
 
     def find_all(self):
-        # Consultar todas as entidades
         pass
 
-    def find_by_id(self, task_id):
-        # Consultar pelo ID
+    def find_by_id(self, tarefa_id):
         pass
 
-    def update(self, task):
-        # Atualizar
+    def update(self, tarefa):
         pass
 
-    def delete(self, task_id):
-        # Excluir
+    def delete(self, tarefa_id):
         pass
