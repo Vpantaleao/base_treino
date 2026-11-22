@@ -67,12 +67,38 @@ class UI:
         except TaskNotFoundError as e:
             print(f"[Aviso] {e}")
 
+    def _atualizar_tarefa(self):
+        print("\n=== Atualizar Tarefa ===")
+        tarefa_id = self._ler_id()
+        if tarefa_id is None:
+            return
+
+        try:
+            tarefa_atual = self.services.get(tarefa_id)
+            print(
+                f"Atualizando tarefa #{tarefa_atual.id} "
+                f"(Situação atual: {tarefa_atual.situacao})"
+            )
+            novo_titulo = input("Novo título (obrigatório): ")
+            nova_descricao = input("Nova descrição (opcional): ")
+
+            tarefa = self.services.update(tarefa_id, novo_titulo, nova_descricao)
+            print(
+                f"[Sucesso] Tarefa #{tarefa.id} atualizada! "
+                f"Situação preservada: {tarefa.situacao}"
+            )
+        except TaskNotFoundError as e:
+            print(f"[Aviso] {e}")
+        except TaskValidationError as e:
+            print(f"[Erro] {e}")
+
     def show_principal_menu(self):
         while True:
             print("\n=== Menu Principal ===")
             print("1 - Cadastrar tarefa")
             print("2 - Listar tarefas")
             print("3 - Consultar tarefa por ID")
+            print("4 - Atualizar tarefa")
             print("0 - Sair")
             opcao = input("Escolha uma opção: ").strip()
 
@@ -82,6 +108,8 @@ class UI:
                 self._listar_tarefas()
             elif opcao == "3":
                 self._consultar_tarefa_por_id()
+            elif opcao == "4":
+                self._atualizar_tarefa()
             elif opcao == "0":
                 print("Encerrando...")
                 break

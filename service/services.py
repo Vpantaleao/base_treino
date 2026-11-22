@@ -41,7 +41,24 @@ class Services:
         return tarefa
 
     def update(self, tarefa_id, titulo, descricao):
-        pass
+        if not isinstance(titulo, str) or not titulo.strip():
+            raise TaskValidationError(
+                "O título é obrigatório e não pode conter apenas espaços em branco."
+            )
+
+        tarefa_existente = self.get(tarefa_id)
+
+        titulo_limpo = titulo.strip()
+        descricao_limpa = descricao.strip() if isinstance(descricao, str) else ""
+
+        tarefa_atualizada = Entity(
+            id=tarefa_existente.id,
+            titulo=titulo_limpo,
+            descricao=descricao_limpa,
+            concluida=tarefa_existente.concluida,
+        )
+        self.repository.update(tarefa_atualizada)
+        return tarefa_atualizada
 
     def delete(self, tarefa_id):
         pass
